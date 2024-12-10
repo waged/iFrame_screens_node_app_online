@@ -18,7 +18,7 @@ import productRoutes from "./routes/productRoutes";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // MongoDB Connection
 export const connectDB = async (): Promise<void> => {
@@ -30,12 +30,6 @@ export const connectDB = async (): Promise<void> => {
     console.error("MongoDB connection error:", error);
     process.exit(1); // Exit process if DB connection fails
   }
-};
-
-// Load SSL certificate and private key
-const sslOptions = {
-  key: fs.readFileSync("/etc/letsencrypt/live/things-connect.net/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/things-connect.net/fullchain.pem"),
 };
 
 // Rate Limiter
@@ -103,7 +97,7 @@ app.get("/regal/test", (req: Request, res: Response) => {
 });
 
 // HTTPS Server
-const server = https.createServer(sslOptions, app);
+const server = https.createServer(app);
 server.listen(PORT, () => {
   console.log(`Regal Server is running securely at port :${PORT}`);
 });
